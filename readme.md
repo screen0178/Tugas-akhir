@@ -10,6 +10,7 @@ curl -L https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.2.3/RealES
 ## Dataset prep
 
 ### Generate meta_info
+python scripts/video_to_frame.py -i inputs/VID_20240813_073429.mp4 -o datasets/custom_tune/hr -n 50
 python scripts/generate_meta_info.py --input datasets/custom_tune/hr --root datasets/custom_tune --meta_info datasets/custom_tune/meta_info/meta_info_custom_tune.txt
 
 ```
