@@ -8,6 +8,9 @@ tmp/*
 weights/*
 inputs/*
 
+static/processed/*
+static/uploads/*
+
 version.py
 
 # Byte-compiled / optimized / DLL files
@@ -141,3 +144,10 @@ dmypy.json
 .pyre/
 
 .ruff_cache/
+
+
+# frontend
+frontend/node_modules
+frontend/dist
+frontend/dist-ssr
+frontend/*.local

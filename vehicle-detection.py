@@ -9,15 +9,15 @@ model = YOLO("yolov8n.pt")  # You can use other versions like "yolov8s.pt", "yol
 vehicle_classes = [2, 5, 7]
 
 # Create a folder to save detected object images
-output_folder = "inputs"
+output_folder = "inputs/detected_objects"
 os.makedirs(output_folder, exist_ok=True)
 
 # Load a video
-video_path = "tf.mp4"  # Replace with your video path
+video_path = "inputs/vlc-record-2025-02-07-10h03m40s-Media Presentation-.mp4"  # Replace with your video path
 cap = cv2.VideoCapture(video_path)
 
 # Initialize object counter
-object_counter = 0
+object_counter = 28
 tracked_objects = {}  # Dictionary to store tracked objects and their counts
 
 # Initialize the tracker (ByteTrack is used here)

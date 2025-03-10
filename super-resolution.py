@@ -10,7 +10,7 @@ from realesrgan.archs.srvgg_arch import SRVGGNetCompact
 
 
 def SuperRes(img_path):
-    model_name = "RealESRGAN_x4plus"
+    model_name = "RealESRGAN_x4plus_finetune_1000iter"
     model_path = os.path.join("weights", model_name + ".pth")
     netscale = 4
     model = RRDBNet(
@@ -18,7 +18,7 @@ def SuperRes(img_path):
     )
 
     f_input = img_path
-    output_dir = "results"
+    output_dir = "results/finetune_1000iter"
     os.makedirs(output_dir, exist_ok=True)
 
     denoise_strength = 0.5
@@ -83,4 +83,4 @@ def SuperRes(img_path):
             cv2.imwrite(save_path, output)
 
 
-SuperRes("inputs")
+SuperRes("inputs/detected_objects")
