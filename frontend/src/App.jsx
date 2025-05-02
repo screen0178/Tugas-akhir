@@ -7,11 +7,14 @@ const API_URL = "http://localhost:8000"
 function App() {
   const [file, setFile] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [processedImage, setProcessedImage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [imageId, setImageId] = useState(null);
   const [publicUrl, setPublicUrl] = useState(null);
+  const [processedImage, setProcessedImage] = useState(null);
   const [processedUrl, setProcessedUrl] = useState(null);
+  const [proccesedTime, setProccesedTime] = useState(null);
+  const [bicubicUrl, setBicubicUrl] = useState(null);
+  const [bicubicTime, setBicubicTime] = useState(null);
 
   const onDrop = useCallback( async (acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -31,6 +34,7 @@ function App() {
         });
         setImageId(response.data.image_id);
         setPublicUrl(response.data.public_url);
+        alert("upload succesfull")
       } catch (err) {
         console.error(err);
       }
@@ -66,7 +70,11 @@ function App() {
     setIsProcessing(true);
     try {
       const response = await axios.post(`${API_URL}/api/img-inference/?image_id=${imageId}`);
+      const responseBicubic = await axios.post(`${API_URL}/api/bicubic-upscale/?image_id=${imageId}&scale_factor=4`);
 
+      setBicubicTime(responseBicubic.data.bicubic_time)
+      setBicubicUrl(responseBicubic.data.bicubic_url)
+      setProccesedTime(response.data.processed_time);
       setProcessedUrl(response.data.processed_url);
     } catch (err) {
       setError("Failed to process image.");
@@ -142,7 +150,7 @@ function App() {
                   className="max-h-96 mx-auto rounded-lg"
                 />
                 <button
-                  onClick={() => setFile(null)}
+                  onClick={() => {setFile(null); setProcessedImage(null);}}
                   className="text-red-400 hover:text-red-300"
                 >
                   Remove image
@@ -180,9 +188,27 @@ function App() {
           {/* Result Section */}
           {processedImage && (
             <div className="border border-gray-700 rounded-lg p-6 bg-gray-800/50">
-              <h2 className="text-xl font-semibold mb-4">Enhanced Result</h2>
+              <h2 className="text-xl font-semibold mb-4">Real-ESRGAN upscaling</h2>
+              <h2 className="text-xl font-semibold mb-4">{proccesedTime.toFixed(2)} seconds</h2>
               <img
                 src={API_URL + processedUrl}
+                alt="Processed"
+                className="max-h-96 mx-auto rounded-lg"
+              />
+              <button
+                  onClick={downloadImage}
+                  className="text-blue-400 hover:text-red-300"
+                >
+                  Download
+                </button>
+            </div>
+          )}
+          {processedImage && (
+            <div className="border border-gray-700 rounded-lg p-6 bg-gray-800/50">
+              <h2 className="text-xl font-semibold mb-4">Standard Bicubic upscaling</h2>
+              <h2 className="text-xl font-semibold mb-4">{bicubicTime.toFixed(2)} seconds</h2>
+              <img
+                src={API_URL + bicubicUrl}
                 alt="Processed"
                 className="max-h-96 mx-auto rounded-lg"
               />
